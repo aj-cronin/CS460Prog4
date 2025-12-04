@@ -1,22 +1,21 @@
-﻿record_id,pet_id,staff_id,record_date,record_type,notes,,,
-1,3,5,6/12/25,Wellness,Routine wellness check,,,
-2,7,12,7/1/25,Treatment,Minor wound treated,,,
-3,1,1,6/20/25,Vaccination,Rabies booster administered,,,
-4,5,17,7/18/25,Wellness,Weight and diet reviewed,,,
-5,2,2,6/25/25,Treatment,Flea treatment applied,,,
-6,4,6,6/15/25,Emergency,Emergency: allergic reaction,,,
-7,10,20,6/22/25,Wellness,Dental exam performed,,,
-8,3,15,7/8/25,Vaccination,Distemper booster given,,,
-9,6,11,6/28/25,Treatment,Deworming completed,,,
-10,1,18,7/5/25,Wellness,Heart rate and vitals normal,,,
-11,8,2,7/3/25,Wellness,Skin irritation treated,,,
-12,12,14,7/12/25,Surgery,Spay surgery completed,,,
-13,5,12,7/22/25,Vaccination,Feline leukemia vaccine administered,,,
-14,9,1,7/5/25,Wellness,Follow-up after minor injury,,,
-15,11,6,7/10/25,Treatment,Ear infection treated,,,
-16,14,18,7/17/25,Emergency,Emergency: broken nail,,,
-17,17,17,7/25/25,Vaccination,Annual wellness check,,,
-18,20,5,8/2/25,Wellness,Follow-up exam,,,
-19,15,20,7/20/25,Treatment,Minor injury bandaged,,,
-20,13,15,7/15/25,Wellness,Check-up after vaccination,,,
-,,,,,,,,
+﻿record_id,pet_id,staff_id,record_date,record_type,notes
+1,3,5,6/12/25,Wellness,Routine wellness check
+2,7,12,7/1/25,Treatment,Minor wound treated
+3,1,1,6/20/25,Vaccination,Rabies booster administered
+4,5,17,7/18/25,Wellness,Weight and diet reviewed
+5,2,2,6/25/25,Treatment,Flea treatment applied
+6,4,6,6/15/25,Emergency,Emergency: allergic reaction
+7,10,20,6/22/25,Wellness,Dental exam performed
+8,3,15,7/8/25,Vaccination,Distemper booster given
+9,6,11,6/28/25,Treatment,Deworming completed
+10,1,18,7/5/25,Wellness,Heart rate and vitals normal
+11,8,2,7/3/25,Wellness,Skin irritation treated
+12,12,14,7/12/25,Surgery,Spay surgery completed
+13,5,12,7/22/25,Vaccination,Feline leukemia vaccine administered
+14,9,1,7/5/25,Wellness,Follow-up after minor injury
+15,11,6,7/10/25,Treatment,Ear infection treated
+16,14,18,7/17/25,Emergency,Emergency: broken nail
+17,17,17,7/25/25,Vaccination,Annual wellness check
+18,20,5,8/2/25,Wellness,Follow-up exam
+19,15,20,7/20/25,Treatment,Minor injury bandaged
+20,13,15,7/15/25,Wellness,Check-up after vaccination
