@@ -89,11 +89,11 @@ public class insertSampleData {
 
             stmt = dbconn.createStatement();
 
-            dropTables(stmt);
-            createTables(stmt);
+            executeSQLFile("dropTables", stmt);
+            executeSQLFile("createTables", stmt);
 
-            insertSampleAdoptionApplication(stmt);
-            // insertSampleAdoption(stmt);
+            insertData("Adoption_Application", new int[] {3 , 6}, stmt);
+            insertData("Adoption", new int[] {4, 6}, stmt);
             // insertSampleEventRegistration(stmt);
             // insertSampleEvent(stmt);
             // insertSampleHealthRecord(stmt);
@@ -122,8 +122,8 @@ public class insertSampleData {
 
     }
 
-    private static void dropTables(Statement stmt) throws SQLException {
-         File fileContent = new File("initialSQLfiles/dropTables.sql");
+    private static void executeSQLFile(String fileName, Statement stmt) throws SQLException {
+         File fileContent = new File(String.format("initialSQLfiles/%s.sql", fileName));
 
         BufferedReader reader = null;
         try {
@@ -148,7 +148,7 @@ public class insertSampleData {
                 stmt.executeQuery(d);
             }
 
-            System.out.println("Successfully dropped prior tables");
+            System.out.println(String.format("Successfully exexuted %s.sql", fileName));
         } catch (IOException e){
             System.out.println(e);
             System.exit(-1);
@@ -156,102 +156,9 @@ public class insertSampleData {
 
     }
 
-    private static void createTables(Statement stmt) throws SQLException {
-         File fileContent = new File("initialSQLfiles/createTables.sql");
-
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new FileReader(fileContent));
-        } catch (FileNotFoundException e) {
-            System.out.println(e);
-            System.exit(-1);
-        }
-
-        try {
-            // Skip Header
-            String currLine = reader.readLine();
-
-            String allLines = "";
-
-            while (currLine != null) {
-                allLines += currLine;
-                currLine = reader.readLine();
-            }
-
-            for (String d : allLines.split(";")) {
-                stmt.executeQuery(d);
-            }
-
-            System.out.println("Successfully created initial tables");
-        } catch (IOException e){
-            System.out.println(e);
-            System.exit(-1);
-        }
-
-    }
-
-
-    private static void insertSampleStaff(Statement stmt) {
-            
-        }
-
-    private static void insertSampleRoom(Statement stmt) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'insertSampleRoom'");
-        }
-
-    private static void insertSampleReservation(Statement stmt) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'insertSampleReservation'");
-        }
-
-    private static void insertSamplePet(Statement stmt) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'insertSamplePet'");
-        }
-
-    private static void insertSampleOrder(Statement stmt) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'insertSampleOrder'");
-        }
-
-    private static void insertSampleOrderItem(Statement stmt) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'insertSampleOrderItem'");
-        }
-
-    private static void insertSampleMenuItem(Statement stmt) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'insertSampleMenuItem'");
-        }
-
-    private static void insertSampleMembershipTier(Statement stmt) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'insertSampleMembershipTier'");
-        }
-
-    private static void insertSampleHealthRecord(Statement stmt) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'insertSampleHealthRecord'");
-        }
-
-    private static void insertSampleEvent(Statement stmt) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'insertSampleEvent'");
-        }
-
-    private static void insertSampleEventRegistration(Statement stmt) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'insertSampleEventRegistration'");
-        }
-
-    private static void insertSampleAdoption(Statement stmt) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'insertSampleAdoption'");
-        }
-
-    private static void insertSampleAdoptionApplication(Statement stmt) throws SQLException{
-        File fileContent = new File("SampleDataCSVs/Adoption_Application.csv");
+    
+    private static void insertData(String tableName, int[] dateColumnIndicies, Statement stmt) throws SQLException {
+        File fileContent = new File(String.format("SampleDataCSVs/%s.csv", tableName));
 
         BufferedReader reader = null;
         try {
@@ -276,28 +183,25 @@ public class insertSampleData {
                         splitLine[i] = "NULL";
                     }
 
-                    if(i != 6 && i != 3) {
+                    if(!contains(dateColumnIndicies, i)) {
                         if (!isNumeric(splitLine[i])) splitLine[i] = String.format("'%s'", splitLine[i]);
                     } else splitLine[i] = splitLine[i] = String.format("TO_DATE('%s', 'MM-DD-YYYY')", splitLine[i]);
-
-
                 }
 
                 String valueList = String.join(",", splitLine);
-                
-                String currInsert = String.format("INSERT INTO ajcronin.Adoption_Application VALUES (%s)", valueList);
+
+                String currInsert = String.format("INSERT INTO ajcronin.%s VALUES (%s)", tableName, valueList);
 
                 stmt.executeQuery(currInsert);
 
                 currLine = reader.readLine();
             }
 
-            System.out.println("Successfully imported for Adoption_Application Data");
+            System.out.println(String.format("Successfully imported for %s Data", tableName));
         } catch (IOException e){
             System.out.println(e);
             System.exit(-1);
         }
-
     }
 
     private static boolean isNumeric(String s) {
@@ -308,5 +212,60 @@ public class insertSampleData {
             return false;
         }
     }
+    
+    private static boolean contains(int[] numArr, int num) {
+        for (int i : numArr) {
+            if (i == num) return true;
+        }
+
+        return false;
+    }
+
+    private static void insertSampleEventRegistration(Statement stmt) {
+        throw new UnsupportedOperationException("Unimplemented method 'insertSampleEventRegistration'");
+    }
+
+    private static void insertSampleEvent(Statement stmt) {
+        throw new UnsupportedOperationException("Unimplemented method 'insertSampleEvent'");
+    }
+
+    private static void insertSampleHealthRecord(Statement stmt) {
+        throw new UnsupportedOperationException("Unimplemented method 'insertSampleHealthRecord'");
+    }
+
+    private static void insertSampleMembershipTier(Statement stmt) {
+        throw new UnsupportedOperationException("Unimplemented method 'insertSampleMembershipTier'");
+    }
+
+    private static void insertSampleMenuItem(Statement stmt) {
+        throw new UnsupportedOperationException("Unimplemented method 'insertSampleMenuItem'");
+    }
+
+    private static void insertSampleOrderItem(Statement stmt) {
+        throw new UnsupportedOperationException("Unimplemented method 'insertSampleOrderItem'");
+    }
+
+    private static void insertSampleOrder(Statement stmt) {
+        throw new UnsupportedOperationException("Unimplemented method 'insertSampleOrder'");
+    }
+
+    private static void insertSamplePet(Statement stmt) {
+        throw new UnsupportedOperationException("Unimplemented method 'insertSamplePet'");
+    }
+
+    private static void insertSampleReservation(Statement stmt) {
+        throw new UnsupportedOperationException("Unimplemented method 'insertSampleReservation'");
+    }
+
+    private static void insertSampleRoom(Statement stmt) {
+        throw new UnsupportedOperationException("Unimplemented method 'insertSampleRoom'");
+    }
+
+    private static void insertSampleStaff(Statement stmt) {
+        // empty implementation
+    }
+
+
+
 
 }
