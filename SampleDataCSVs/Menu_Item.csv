@@ -1,0 +1,21 @@
+﻿item_id,name,category,base_price
+1,Hot Coffee,Coffee,2.5
+2,Iced Coffee,Coffee,3.5
+3,Hot Tea,Tea,2.25
+4,Iced Tea,Tea,3
+5,Muffin,Pastry,3
+6,Croissant,Pastry,3.25
+7,Donut,Pastry,1.75
+8,Roll,Pastry,2
+9,Breakfast Sandwich,Meal,7.5
+10,Soup,Meal,4.5
+11,Grilled Cheese,Meal,6
+12,Fruit Cup,Meal,3.75
+13,Salad,Meal,6.5
+14,Granola Bowl,Meal,5.5
+15,Paw Punch,Specialty Drink,4.5
+16,Berry Smoothie,Specialty Drink,5.5
+17,Rattlesnake Cocktail,Specialty Drink,9
+18,Moscow Mule,Specialty Drink,10
+19,Bee's Knees,Specialty Drink,10
+20,Grasshopper,Specialty Drink,9.5

@@ -1,0 +1,22 @@
+﻿reservation_id,member_id,room_id,reservation_date,start_time,duration_minutes,status,check_in_time,check_out_time
+1,4,6,12/2/25,9:15 AM,75,Complete,9:21 AM,10:32 AM
+2,9,13,12/2/25,10:45 AM,90,Complete,10:39 AM,12:13 PM
+3,1,2,12/2/25,11:30 AM,105,Complete,11:37 AM,1:17 PM
+4,16,12,12/2/25,12:15 PM,60,Complete,12:08 PM,1:14 PM
+5,7,10,12/2/25,1:45 PM,75,Complete,1:52 PM,2:59 PM
+6,12,17,12/3/25,9:00 AM,115,Complete,8:53 AM,10:57 AM
+7,3,8,12/3/25,10:30 AM,75,Complete,10:36 AM,11:43 AM
+8,18,15,12/3/25,12:00 PM,75,Complete,12:07 PM,1:16 PM
+9,5,11,12/3/25,1:30 PM,120,Complete,1:24 PM,3:32 PM
+10,14,19,12/3/25,3:45 PM,90,Complete,3:53 PM,5:13 PM
+11,2,5,12/4/25,9:15 AM,60,Complete,9:10 AM,10:17 AM
+12,11,20,12/4/25,11:00 AM,90,Complete,11:08 AM,12:32 PM
+13,6,6,12/4/25,12:45 PM,130,Complete,12:39 PM,2:56 PM
+14,19,12,12/4/25,2:15 PM,105,Complete,2:22 PM,3:58 PM
+15,8,13,12/5/25,9:45 AM,75,Complete,9:49 AM,10:59 AM
+16,20,2,12/5/25,11:00 AM,90,Complete,11:03 AM,12:28 PM
+17,10,16,12/5/25,1:15 PM,105,Complete,1:22 PM,3:02 PM
+18,15,11,12/6/25,9:45 AM,115,Upcoming,9:39 AM,11:42 AM
+19,13,17,12/6/25,12:30 PM,75,Upcoming,12:35 PM,1:43 PM
+20,2,8,12/7/25,3:15 PM,140,Upcoming,3:07 PM,5:37 PM
+,,,,,,,,
