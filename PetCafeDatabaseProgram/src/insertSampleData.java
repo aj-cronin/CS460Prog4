@@ -1,6 +1,5 @@
 import java.io.*;
 import java.sql.*;                 // For access to the SQL interaction methods
-import java.io.BufferedReader;
 
 public class insertSampleData {
         public static void main (String [] args){
@@ -71,18 +70,18 @@ public class insertSampleData {
             stmt = dbconn.createStatement();
 
             insertSampleAdoptionApplication(stmt);
-            insertSampleAdoption(stmt);
-            insertSampleEventRegistration(stmt);
-            insertSampleEvent(stmt);
-            insertSampleHealthRecord(stmt);
-            insertSampleMembershipTier(stmt);
-            insertSampleMenuItem(stmt);
-            insertSampleOrderItem(stmt);
-            insertSampleOrder(stmt);
-            insertSamplePet(stmt);
-            insertSampleReservation(stmt);
-            insertSampleRoom(stmt);
-            insertSampleStaff(stmt);
+            // insertSampleAdoption(stmt);
+            // insertSampleEventRegistration(stmt);
+            // insertSampleEvent(stmt);
+            // insertSampleHealthRecord(stmt);
+            // insertSampleMembershipTier(stmt);
+            // insertSampleMenuItem(stmt);
+            // insertSampleOrderItem(stmt);
+            // insertSampleOrder(stmt);
+            // insertSamplePet(stmt);
+            // insertSampleReservation(stmt);
+            // insertSampleRoom(stmt);
+            // insertSampleStaff(stmt);
 
             stmt.close();
             dbconn.close();
@@ -101,8 +100,7 @@ public class insertSampleData {
     }
 
     private static void insertSampleStaff(Statement stmt) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'insertSampleStaff'");
+            
         }
 
     private static void insertSampleRoom(Statement stmt) {
@@ -160,9 +158,63 @@ public class insertSampleData {
             throw new UnsupportedOperationException("Unimplemented method 'insertSampleAdoption'");
         }
 
-    private static void insertSampleAdoptionApplication(Statement stmt) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'insertSampleAdoptionApplication'");
+    private static void insertSampleAdoptionApplication(Statement stmt) throws SQLException{
+        File fileContent = new File("SampleDataCSVs/Adoption_Application.csv");
+
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader(fileContent));
+        } catch (FileNotFoundException e) {
+            System.out.println(e);
+            System.exit(-1);
+        }
+
+        try {
+            // Skip Header
+            String currLine = reader.readLine();
+
+            currLine = reader.readLine();
+
+            while (currLine != null) {
+                String[] splitLine = currLine.split(",");
+
+                for (int i = 0; i < splitLine.length; i++) {
+
+                    if (splitLine[i].equals("")) {
+                        splitLine[i] = "NULL";
+                    }
+
+                    if(i != 6 && i != 3) {
+                        if (!isNumeric(splitLine[i])) splitLine[i] = String.format("'%s'", splitLine[i]);
+                    } else splitLine[i] = splitLine[i] = String.format("TO_DATE('%s', 'MM-DD-YYYY')", splitLine[i]);
+
+
+                }
+
+                String valueList = String.join(",", splitLine);
+                
+                String currInsert = String.format("INSERT INTO ajcronin.Adoption_Application VALUES (%s)", valueList);
+
+                stmt.executeQuery(currInsert);
+
+                currLine = reader.readLine();
+            }
+
+            System.out.println("Successfully imported for Adoption_Application Data");
+        } catch (IOException e){
+            System.out.println(e);
+            System.exit(-1);
+        }
+
+    }
+
+    private static boolean isNumeric(String s) {
+        try {
+            Double.parseDouble(s);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
 }
