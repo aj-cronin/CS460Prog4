@@ -1,0 +1,14 @@
+DROP TABLE Order_Item;
+DROP TABLE Event_Registration;
+DROP TABLE Adoption;
+DROP TABLE Adoption_Application;
+DROP TABLE "Order";
+DROP TABLE Reservation;
+DROP TABLE Event;
+DROP TABLE Health_Record;
+DROP TABLE Pet;
+DROP TABLE Member;
+DROP TABLE Staff;
+DROP TABLE Membership_Tier;
+DROP TABLE Room;
+DROP TABLE Menu_Item;

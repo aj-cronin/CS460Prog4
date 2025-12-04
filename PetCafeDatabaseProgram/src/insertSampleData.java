@@ -1,3 +1,23 @@
+/*
+ * To compile and execute this program on lectura:
+ *
+ *   Add the Oracle JDBC driver to your CLASSPATH environment variable:
+ *
+ *         export CLASSPATH=/usr/lib/oracle/19.8/client64/lib/ojdbc8.jar:${CLASSPATH}
+ *
+ *     (or whatever shell variable set-up you need to perform to add the
+ *     JAR file to your Java CLASSPATH)
+ *
+ *   Compile this file:
+ *
+ *         javac JDBC.java
+ *
+ *   Finally, run the program:
+ *
+ *         java JDBC <oracle username> <oracle password>
+ */
+
+
 import java.io.*;
 import java.sql.*;                 // For access to the SQL interaction methods
 
@@ -69,6 +89,9 @@ public class insertSampleData {
 
             stmt = dbconn.createStatement();
 
+            dropTables(stmt);
+            createTables(stmt);
+
             insertSampleAdoptionApplication(stmt);
             // insertSampleAdoption(stmt);
             // insertSampleEventRegistration(stmt);
@@ -98,6 +121,75 @@ public class insertSampleData {
         }
 
     }
+
+    private static void dropTables(Statement stmt) throws SQLException {
+         File fileContent = new File("initialSQLfiles/dropTables.sql");
+
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader(fileContent));
+        } catch (FileNotFoundException e) {
+            System.out.println(e);
+            System.exit(-1);
+        }
+
+        try {
+            // Skip Header
+            String currLine = reader.readLine();
+
+            String allLines = "";
+
+            while (currLine != null) {
+                allLines += currLine;
+                currLine = reader.readLine();
+            }
+
+            for (String d : allLines.split(";")) {
+                stmt.executeQuery(d);
+            }
+
+            System.out.println("Successfully dropped prior tables");
+        } catch (IOException e){
+            System.out.println(e);
+            System.exit(-1);
+        }
+
+    }
+
+    private static void createTables(Statement stmt) throws SQLException {
+         File fileContent = new File("initialSQLfiles/createTables.sql");
+
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader(fileContent));
+        } catch (FileNotFoundException e) {
+            System.out.println(e);
+            System.exit(-1);
+        }
+
+        try {
+            // Skip Header
+            String currLine = reader.readLine();
+
+            String allLines = "";
+
+            while (currLine != null) {
+                allLines += currLine;
+                currLine = reader.readLine();
+            }
+
+            for (String d : allLines.split(";")) {
+                stmt.executeQuery(d);
+            }
+
+            System.out.println("Successfully created initial tables");
+        } catch (IOException e){
+            System.out.println(e);
+            System.exit(-1);
+        }
+
+    }
+
 
     private static void insertSampleStaff(Statement stmt) {
             
