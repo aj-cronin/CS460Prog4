@@ -2,7 +2,7 @@ DROP TABLE Order_Item;
 DROP TABLE Event_Registration;
 DROP TABLE Adoption;
 DROP TABLE Adoption_Application;
-DROP TABLE "Order";
+DROP TABLE Customer_Order;
 DROP TABLE Reservation;
 DROP TABLE Event;
 DROP TABLE Health_Record;
