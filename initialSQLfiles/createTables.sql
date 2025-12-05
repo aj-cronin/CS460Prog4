@@ -15,10 +15,11 @@ CREATE TABLE Menu_Item (
         primary key (item_id)
 );
 
-CREATE TABLE "Order" (
+CREATE TABLE Customer_Order (
     order_id        integer,
     member_id       integer,
     reservation_id  integer,
+    order_date      date,
     order_time      timestamp,
     total_price     float,
     payment_status  varchar2(32),
@@ -44,19 +45,21 @@ CREATE TABLE Reservation (
         status  varchar2(32),
         check_in_time   timestamp,
         check_out_time  timestamp,
+        tier_id         integer,
         primary key (reservation_id)
 );
 
 CREATE TABLE Event (
         event_id        integer,
-        title           varchar2(32),
-        description     varchar2(32),
+        title           varchar2(40),
+        description     varchar2(40),
         room_id         integer,
         event_date      date,
         start_time      timestamp,
         end_time        timestamp,
         max_attendees   integer,
         event_type      varchar2(32),
+        staff_id        integer,
         primary key (event_id)
 );
 
@@ -91,7 +94,7 @@ CREATE TABLE Member (
 CREATE TABLE Membership_Tier (
     tier_id       integer,
     tier_name     varchar2(32),
-    description   varchar2(128),
+    description   varchar2(140),
     discount_rate integer,
     visit_limit   integer,
     primary key (tier_id)

@@ -92,22 +92,25 @@ public class insertSampleData {
             executeSQLFile("dropTables", stmt);
             executeSQLFile("createTables", stmt);
 
-            insertData("Adoption_Application", new int[] {3 , 6}, stmt);
-            insertData("Adoption", new int[] {4, 6}, stmt);
-            // insertSampleEventRegistration(stmt);
-            // insertSampleEvent(stmt);
-            // insertSampleHealthRecord(stmt);
-            // insertSampleMembershipTier(stmt);
-            // insertSampleMenuItem(stmt);
-            // insertSampleOrderItem(stmt);
-            // insertSampleOrder(stmt);
-            // insertSamplePet(stmt);
-            // insertSampleReservation(stmt);
-            // insertSampleRoom(stmt);
-            // insertSampleStaff(stmt);
+            insertData("Adoption_Application", new int[] {3 , 6}, new int[] {}, stmt);
+            insertData("Adoption", new int[] {4, 6}, new int[] {}, stmt);
+            insertData("Customer_Order", new int[] {3}, new int[] {4}, stmt);
+            insertData("Event_Registration", new int[] {2}, new int[] {}, stmt);
+            insertData("Event", new int[] {4}, new int[] {5, 6}, stmt);
+            insertData("Health_Record", new int[] {3}, new int[] {}, stmt);
+            insertData("Member", new int[] {4}, new int[] {}, stmt);
+            insertData("Membership_Tier", new int[] {}, new int[] {}, stmt);
+            insertData("Menu_Item", new int[] {}, new int[] {}, stmt);
+            insertData("Order_Item", new int[] {}, new int[] {}, stmt);
+            insertData("Pet", new int[] {5}, new int[] {}, stmt);
+            insertData("Reservation", new int[] {3}, new int[] {4, 7, 8}, stmt);
+            insertData("Room", new int[] {}, new int[] {}, stmt);
+            insertData("Staff", new int[] {4}, new int[] {}, stmt);
 
             stmt.close();
             dbconn.close();
+
+            System.out.println("All Sample Data has been inserted Successfully...");
 
         } catch (SQLException e) {
 
@@ -148,7 +151,7 @@ public class insertSampleData {
                 stmt.executeQuery(d);
             }
 
-            System.out.println(String.format("Successfully exexuted %s.sql", fileName));
+            System.out.println(String.format("Successfully executed %s.sql", fileName));
         } catch (IOException e){
             System.out.println(e);
             System.exit(-1);
@@ -157,7 +160,7 @@ public class insertSampleData {
     }
 
     
-    private static void insertData(String tableName, int[] dateColumnIndicies, Statement stmt) throws SQLException {
+    private static void insertData(String tableName, int[] dateColumnIndicies, int[] timeColumnIndices, Statement stmt) throws SQLException {
         File fileContent = new File(String.format("SampleDataCSVs/%s.csv", tableName));
 
         BufferedReader reader = null;
@@ -176,6 +179,7 @@ public class insertSampleData {
 
             while (currLine != null) {
                 String[] splitLine = currLine.split(",");
+  
 
                 for (int i = 0; i < splitLine.length; i++) {
 
@@ -183,9 +187,14 @@ public class insertSampleData {
                         splitLine[i] = "NULL";
                     }
 
-                    if(!contains(dateColumnIndicies, i)) {
-                        if (!isNumeric(splitLine[i])) splitLine[i] = String.format("'%s'", splitLine[i]);
-                    } else splitLine[i] = splitLine[i] = String.format("TO_DATE('%s', 'MM-DD-YYYY')", splitLine[i]);
+                    if(contains(dateColumnIndicies, i)) {
+                        splitLine[i] = splitLine[i] = String.format("TO_DATE('%s', 'MM-DD-YYYY')", splitLine[i]);
+                    } else if (contains(timeColumnIndices, i)) {
+                        splitLine[i] = splitLine[i] = String.format("TO_TIMESTAMP('%s', 'HH:MI AM')", splitLine[i]);
+                    } else if (!isNumeric(splitLine[i])) {
+                        splitLine = flattenCommaString(splitLine, i);
+                        splitLine[i] = String.format("'%s'", splitLine[i].replace("'", "''").replace("\"", ""));
+                    }
                 }
 
                 String valueList = String.join(",", splitLine);
@@ -221,51 +230,34 @@ public class insertSampleData {
         return false;
     }
 
-    private static void insertSampleEventRegistration(Statement stmt) {
-        throw new UnsupportedOperationException("Unimplemented method 'insertSampleEventRegistration'");
+    private static String[] flattenCommaString(String[] splitLine, int i) {
+        String currString = splitLine[i];
+
+        if (currString.charAt(0) != '"') return splitLine;
+
+        while (splitLine[i + 1].charAt(splitLine[i+1].length()-1) != '"') {
+            splitLine[i] += splitLine[i+1];
+
+            splitLine = remove(splitLine, i + 1);
+        }
+
+        splitLine[i] += splitLine[i+1];
+        splitLine = remove(splitLine, i + 1);
+
+        return splitLine;
     }
 
-    private static void insertSampleEvent(Statement stmt) {
-        throw new UnsupportedOperationException("Unimplemented method 'insertSampleEvent'");
+    private static String[] remove(String[] arr, int i) {
+        String[] newArr = new String[arr.length - 1];
+
+        for (int j = 0; j < i; j++) {
+            newArr[j] = arr[j];
+        }
+
+        for (int j = i; j < arr.length - 1; j++) {
+            newArr[j] = arr[j+1];
+        }
+
+        return newArr;
     }
-
-    private static void insertSampleHealthRecord(Statement stmt) {
-        throw new UnsupportedOperationException("Unimplemented method 'insertSampleHealthRecord'");
-    }
-
-    private static void insertSampleMembershipTier(Statement stmt) {
-        throw new UnsupportedOperationException("Unimplemented method 'insertSampleMembershipTier'");
-    }
-
-    private static void insertSampleMenuItem(Statement stmt) {
-        throw new UnsupportedOperationException("Unimplemented method 'insertSampleMenuItem'");
-    }
-
-    private static void insertSampleOrderItem(Statement stmt) {
-        throw new UnsupportedOperationException("Unimplemented method 'insertSampleOrderItem'");
-    }
-
-    private static void insertSampleOrder(Statement stmt) {
-        throw new UnsupportedOperationException("Unimplemented method 'insertSampleOrder'");
-    }
-
-    private static void insertSamplePet(Statement stmt) {
-        throw new UnsupportedOperationException("Unimplemented method 'insertSamplePet'");
-    }
-
-    private static void insertSampleReservation(Statement stmt) {
-        throw new UnsupportedOperationException("Unimplemented method 'insertSampleReservation'");
-    }
-
-    private static void insertSampleRoom(Statement stmt) {
-        throw new UnsupportedOperationException("Unimplemented method 'insertSampleRoom'");
-    }
-
-    private static void insertSampleStaff(Statement stmt) {
-        // empty implementation
-    }
-
-
-
-
 }
