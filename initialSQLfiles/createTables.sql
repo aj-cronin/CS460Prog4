@@ -3,7 +3,7 @@ CREATE TABLE Order_Item (
         item_id         integer,
         quantity        integer,
         unit_price      float,
-        primary key (order_id)
+        primary key (order_id, item_id)
 );
 
 CREATE TABLE Menu_Item (
@@ -67,7 +67,8 @@ CREATE TABLE Event_Registration (
         member_id       integer,
         event_id        integer,
         registration_date       date,
-        attendance_status       varchar2(32)
+        attendance_status       varchar2(32),
+        primary key (member_id, event_id)
 );
 
 CREATE TABLE Health_Record (
