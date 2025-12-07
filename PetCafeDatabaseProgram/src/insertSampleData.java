@@ -198,7 +198,7 @@ public class insertSampleData {
 
                 String valueList = String.join(",", splitLine);
 
-                String currInsert = String.format("INSERT INTO ajcronin.%s VALUES (%s)", tableName, valueList);
+                String currInsert = String.format("INSERT INTO %s VALUES (%s)", tableName, valueList);
 
                 stmt.executeQuery(currInsert);
 
