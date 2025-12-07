@@ -89,8 +89,7 @@ public class insertSampleData {
 
             stmt = dbconn.createStatement();
 
-            executeSQLFile("dropTables", stmt);
-            executeSQLFile("createTables", stmt);
+            executeSQLFile("initializeTables", stmt);
 
             insertData("Adoption_Application", new int[] {3 , 6}, new int[] {}, stmt);
             insertData("Adoption", new int[] {4, 6}, new int[] {}, stmt);
