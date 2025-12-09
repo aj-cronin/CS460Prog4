@@ -1,5 +1,40 @@
 package petcafe;
 
+/*
+ * PetCafeApp.java -- This program is for the user interactive part of the Pet Cafe Project.
+ *                    Users should be able to add, update, and remove to the member, pet,
+ *                    menu, reservation, health record, adoption, and event tables.
+ *                    In addition, the user can choose from several queries to get information
+ *                    about the database according to the Prog4 spec.
+ * 
+ * To compile and execute this program on lectura:
+ *
+ *   Add the Oracle JDBC driver to your CLASSPATH environment variable:
+ *
+ *         export CLASSPATH=/usr/lib/oracle/19.8/client64/lib/ojdbc8.jar:${CLASSPATH}
+ *
+ *     (or whatever shell variable set-up you need to perform to add the
+ *     JAR file to your Java CLASSPATH)
+ *
+ *   Compile this file:
+ *
+ *         javac JDBC.java
+ *
+ *   Finally, run the program:
+ *
+ *         java JDBC <oracle username> <oracle password>
+ *
+ * As of 12/7/2025 there are no known bugs. Each input checks that values are within bounds.
+ * 
+ * Author: Amirkhon Makhkamov
+ * Course: CSc 460 - Database Design
+ * Assignment: Program #4 - Pet Cafe
+ * Instructor: L. McCann
+ * TAs: J. Shen, U. Upadhyay
+ * Due Date: December 8th, 2025
+ */
+
+
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -70,6 +105,24 @@ public class PetCafeApp {
         }
     }
 
+    
+    /*---------------------------------------------------------------------
+    |  Method nextId(conn, table, col)
+    |
+    |  Purpose:  Takes in a table and finds its max id so that the next created one
+    |            is one higher than the previous max.
+    |
+    |  Pre-condition:  conn is established correctly. table is an existing table.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      table    -- Name of SQL table.
+    |      col      -- index that new id is found in
+    |
+    *-------------------------------------------------------------------*/
+
     private static int nextId(Connection conn, String table, String col)
             throws SQLException {
         String sql = "SELECT NVL(MAX(" + col + "),0) + 1 FROM " + table;
@@ -79,6 +132,19 @@ public class PetCafeApp {
             return rs.getInt(1);
         }
     }
+
+    /*---------------------------------------------------------------------
+    |  Method readInt(in, prompt)
+    |
+    |  Purpose:  Reads in the next integer from the user's input
+    |
+    |  Pre-condition:  Scanner is establish correctly, prompt is correct for current query.
+    |
+    |  Parameters:
+    |      in       -- The keyboard input scanner
+    |      prompt   -- The prompt asked for specific query.
+    |
+    *-------------------------------------------------------------------*/
 
     private static int readInt(Scanner in, String prompt) {
         while (true) {
@@ -91,6 +157,19 @@ public class PetCafeApp {
             }
         }
     }
+
+    /*---------------------------------------------------------------------
+    |  Method readOptionalInt(in, prompt)
+    |
+    |  Purpose:  Reads in the next integer from the user's input but optionally.
+    |
+    |  Pre-condition:  Scanner is establish correctly, prompt is correct for current query.
+    |
+    |  Parameters:
+    |      in       -- The keyboard input scanner
+    |      prompt   -- The prompt asked for specific query.
+    |
+    *-------------------------------------------------------------------*/
 
     private static Integer readOptionalInt(Scanner in, String prompt) {
         while (true) {
@@ -105,10 +184,35 @@ public class PetCafeApp {
         }
     }
 
+    /*---------------------------------------------------------------------
+    |  Method readString(in, prompt)
+    |
+    |  Purpose:  Reads in the next String from the user's input.
+    |
+    |  Pre-condition:  Scanner is establish correctly, prompt is correct for current query.
+    |
+    |  Parameters:
+    |      in       -- The keyboard input scanner
+    |      prompt   -- The prompt asked for specific query.
+    |
+    *-------------------------------------------------------------------*/
     private static String readString(Scanner in, String prompt) {
         System.out.print(prompt);
         return in.nextLine().trim();
     }
+
+    /*---------------------------------------------------------------------
+    |  Method readDate(in, prompt)
+    |
+    |  Purpose:  Reads in the next Date from the user's input.
+    |
+    |  Pre-condition:  Scanner is establish correctly, prompt is correct for current query.
+    |
+    |  Parameters:
+    |      in       -- The keyboard input scanner
+    |      prompt   -- The prompt asked for specific query.
+    |
+    *-------------------------------------------------------------------*/
 
     private static Date readDate(Scanner in, String prompt) {
         while (true) {
@@ -126,6 +230,19 @@ public class PetCafeApp {
         }
     }
 
+    /*---------------------------------------------------------------------
+    |  Method readOptionalDate(in, prompt)
+    |
+    |  Purpose:  Reads in the next Date from the user's input, but optionally.
+    |
+    |  Pre-condition:  Scanner is establish correctly, prompt is correct for current query.
+    |
+    |  Parameters:
+    |      in       -- The keyboard input scanner
+    |      prompt   -- The prompt asked for specific query.
+    |
+    *-------------------------------------------------------------------*/
+
     private static Date readOptionalDate(Scanner in, String prompt) {
         while (true) {
             System.out.print(prompt + " (yyyy-MM-dd, blank for null): ");
@@ -140,6 +257,19 @@ public class PetCafeApp {
         }
     }
 
+    /*---------------------------------------------------------------------
+    |  Method readDateTime(in, prompt)
+    |
+    |  Purpose:  Reads in the next date time from the user's input.
+    |
+    |  Pre-condition:  Scanner is establish correctly, prompt is correct for current query.
+    |
+    |  Parameters:
+    |      in       -- The keyboard input scanner
+    |      prompt   -- The prompt asked for specific query.
+    |
+    *-------------------------------------------------------------------*/
+
     private static Timestamp readDateTime(Scanner in, String prompt) {
         while (true) {
             System.out.print(prompt + " (yyyy-MM-dd HH:mm): ");
@@ -152,6 +282,22 @@ public class PetCafeApp {
             }
         }
     }
+
+    /*---------------------------------------------------------------------
+    |  Method memberMenu(conn, in)
+    |
+    |  Purpose:  Displays the options for interacting with member table including adding,
+    |            updating, deleting, and displaying information.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
 
     private static void memberMenu(Connection conn, Scanner in) {
         boolean back = false;
@@ -190,6 +336,22 @@ public class PetCafeApp {
         }
     }
 
+
+    /*---------------------------------------------------------------------
+    |  Method addMember(conn, in)
+    |
+    |  Purpose:  Adds a new member to the member table.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
+
     private static void addMember(Connection conn, Scanner in) throws SQLException {
         int id = nextId(conn, "Member", "member_id");
         String name = readString(in, "Name: ");
@@ -223,6 +385,21 @@ public class PetCafeApp {
         System.out.println("Member added with ID " + id);
     }
 
+    /*---------------------------------------------------------------------
+    |  Method updateMember(conn, in)
+    |
+    |  Purpose:  Updates an existing member in the member table.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
+
     private static void updateMember(Connection conn, Scanner in) throws SQLException {
         int id = readInt(in, "Member ID to update: ");
         String phone = readString(in, "New phone (blank to keep): ");
@@ -247,6 +424,21 @@ public class PetCafeApp {
             else System.out.println("Member updated.");
         }
     }
+
+    /*---------------------------------------------------------------------
+    |  Method deleteMember(conn, in)
+    |
+    |  Purpose:  Deletes an existing member in the member table.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
 
     private static void deleteMember(Connection conn, Scanner in) throws SQLException {
         int id = readInt(in, "Member ID to delete: ");
@@ -288,6 +480,20 @@ public class PetCafeApp {
         }
     }
 
+    /*---------------------------------------------------------------------
+    |  Method listMembers(conn)
+    |
+    |  Purpose:  Lists the information about all members in the member table.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database.
+    |
+    *-------------------------------------------------------------------*/
+
     private static void listMembers(Connection conn) throws SQLException {
         String sql = "SELECT member_id, name, phone, email, tier_id FROM Member ORDER BY member_id";
         try (Statement st = conn.createStatement();
@@ -302,6 +508,22 @@ public class PetCafeApp {
             }
         }
     }
+
+    /*---------------------------------------------------------------------
+    |  Method petMenu(conn, in)
+    |
+    |  Purpose:  Displays the options for interacting with pet table including adding,
+    |            updating, deleting, and displaying information.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
 
     private static void petMenu(Connection conn, Scanner in) {
         boolean back = false;
@@ -356,6 +578,21 @@ public class PetCafeApp {
         }
     }
 
+    /*---------------------------------------------------------------------
+    |  Method addPet(conn, in)
+    |
+    |  Purpose:  Adds a new pet to the pet table.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
+
     private static void addPet(Connection conn, Scanner in) throws SQLException {
         int id = nextId(conn, "Pet", "pet_id");
         String name = readString(in, "Pet name: ");
@@ -397,6 +634,21 @@ public class PetCafeApp {
         System.out.println("Pet added with ID " + id);
     }
 
+    /*---------------------------------------------------------------------
+    |  Method updatePet(conn, in)
+    |
+    |  Purpose:  Updates an existing pet in the pet table.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
+
     private static void updatePet(Connection conn, Scanner in) throws SQLException {
         int id = readInt(in, "Pet ID to update: ");
         String status = readString(in, "New status (blank to keep): ");
@@ -421,6 +673,21 @@ public class PetCafeApp {
             else System.out.println("Pet updated.");
         }
     }
+
+    /*---------------------------------------------------------------------
+    |  Method deletePet(conn, in)
+    |
+    |  Purpose:  Deletes an existing pet in the pet table.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
 
     private static void deletePet(Connection conn, Scanner in) throws SQLException {
         int id = readInt(in, "Pet ID to delete: ");
@@ -480,6 +747,20 @@ public class PetCafeApp {
         }
     }
 
+    /*---------------------------------------------------------------------
+    |  Method listPets(conn)
+    |
+    |  Purpose:  Lists the information about all pets in the pet table.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database.
+    |
+    *-------------------------------------------------------------------*/
+
     private static void listPets(Connection conn) throws SQLException {
         String sql = "SELECT pet_id, name, species, status FROM Pet ORDER BY pet_id";
         try (Statement st = conn.createStatement();
@@ -493,6 +774,21 @@ public class PetCafeApp {
             }
         }
     }
+
+    /*---------------------------------------------------------------------
+    |  Method addAdoptionApplication(conn, in)
+    |
+    |  Purpose:  Adds a new adoption application to the adoption application table.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
 
     private static void addAdoptionApplication(Connection conn, Scanner in) throws SQLException {
         int appId = nextId(conn, "Adoption_Application", "application_id");
@@ -513,6 +809,21 @@ public class PetCafeApp {
         System.out.println("Adoption application created with ID " + appId);
     }
 
+    /*---------------------------------------------------------------------
+    |  Method updateAdoptionApplication(conn, in)
+    |
+    |  Purpose:  Updates an existing adoption application in the adoption application table.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
+
     private static void updateAdoptionApplication(Connection conn, Scanner in) throws SQLException {
         int appId = readInt(in, "Application ID to update: ");
         String status = readString(in, "New status (PENDING, APPROVED, REJECTED, WITHDRAWN): ");
@@ -531,6 +842,21 @@ public class PetCafeApp {
             else System.out.println("Application updated.");
         }
     }
+
+    /*---------------------------------------------------------------------
+    |  Method deleteAdoptionApplication(conn, in)
+    |
+    |  Purpose:  Deletes an existing adoption application in the adoption application table.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
 
     private static void deleteOrWithdrawAdoptionApplication(Connection conn, Scanner in)
             throws SQLException {
@@ -578,6 +904,22 @@ public class PetCafeApp {
             }
         }
     }
+
+    
+    /*---------------------------------------------------------------------
+    |  Method recordAdoption(conn, in)
+    |
+    |  Purpose:  Creates entry in Adoption table if application is approved
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
 
     private static void recordAdoption(Connection conn, Scanner in) throws SQLException {
         int appId = readInt(in, "Approved application ID: ");
@@ -633,6 +975,22 @@ public class PetCafeApp {
         System.out.println("Adoption recorded with ID " + adoptionId);
     }
 
+    /*---------------------------------------------------------------------
+    |  Method reservationMenu(conn, in)
+    |
+    |  Purpose:  Displays the options for interacting with reservation table including adding,
+    |            updating, deleting, and displaying information.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
+
     private static void reservationMenu(Connection conn, Scanner in) {
         boolean back = false;
         while (!back) {
@@ -669,6 +1027,21 @@ public class PetCafeApp {
             }
         }
     }
+
+    /*---------------------------------------------------------------------
+    |  Method addReservation(conn, in)
+    |
+    |  Purpose:  Adds a new reservation to the reservation table.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
 
     private static void addReservation(Connection conn, Scanner in) throws SQLException {
         int resId = nextId(conn, "Reservation", "reservation_id");
@@ -747,6 +1120,21 @@ public class PetCafeApp {
         System.out.println("Reservation created with ID " + resId);
     }
 
+    /*---------------------------------------------------------------------
+    |  Method updateReservation(conn, in)
+    |
+    |  Purpose:  Updates an existing reservation in the reservation table.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
+
     private static void updateReservationStatus(Connection conn, Scanner in) throws SQLException {
         int resId = readInt(in, "Reservation ID: ");
         String status = readString(in, "New status (BOOKED, IN_PROGRESS, COMPLETED, CANCELLED): ");
@@ -764,6 +1152,21 @@ public class PetCafeApp {
             else System.out.println("Reservation updated.");
         }
     }
+
+    /*---------------------------------------------------------------------
+    |  Method cancelReservation(conn, in)
+    |
+    |  Purpose:  Deletes an existing reservation in the reservation table.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
 
     private static void cancelReservation(Connection conn, Scanner in) throws SQLException {
         int resId = readInt(in, "Reservation ID to cancel: ");
@@ -807,6 +1210,20 @@ public class PetCafeApp {
         System.out.println("Reservation cancelled and deleted.");
     }
 
+    /*---------------------------------------------------------------------
+    |  Method listReservations(conn)
+    |
+    |  Purpose:  Lists the information about all reservations in the reservation table.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database.
+    |
+    *-------------------------------------------------------------------*/
+
     private static void listReservations(Connection conn) throws SQLException {
         String sql = "SELECT reservation_id, member_id, room_id, reservation_date, " +
                 "start_time, status FROM Reservation ORDER BY reservation_id";
@@ -822,6 +1239,22 @@ public class PetCafeApp {
             }
         }
     }
+
+    /*---------------------------------------------------------------------
+    |  Method orderMenu(conn, in)
+    |
+    |  Purpose:  Displays the options for interacting with order table including adding,
+    |            updating, deleting, and displaying information.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
 
     private static void orderMenu(Connection conn, Scanner in) {
         boolean back = false;
@@ -859,6 +1292,21 @@ public class PetCafeApp {
             }
         }
     }
+
+    /*---------------------------------------------------------------------
+    |  Method createOrder(conn, in)
+    |
+    |  Purpose:  Adds a new order to the order table.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
 
     private static void createOrder(Connection conn, Scanner in) throws SQLException {
         int orderId = nextId(conn, "Customer_Order", "order_id");
@@ -910,6 +1358,21 @@ public class PetCafeApp {
         System.out.println("Order created with ID " + orderId);
     }
 
+    /*---------------------------------------------------------------------
+    |  Method finalizeOrderTotal(conn, in)
+    |
+    |  Purpose:  Updates order totals to reflect discounts.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
+
     private static void finalizeOrderTotal(Connection conn, int orderId) throws SQLException {
         String qBase = "SELECT SUM(quantity * unit_price) " +
                 "FROM Order_Item WHERE order_id = ?";
@@ -949,6 +1412,21 @@ public class PetCafeApp {
         }
     }
 
+    /*---------------------------------------------------------------------
+    |  Method markOrderPaid(conn, in)
+    |
+    |  Purpose:  Updates an existing order in the order table to be set to paid.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
+    
     private static void markOrderPaid(Connection conn, Scanner in) throws SQLException {
         int orderId = readInt(in, "Order ID to mark PAID: ");
         String sql = "UPDATE Customer_Order SET payment_status = 'PAID' WHERE order_id = ?";
@@ -959,6 +1437,21 @@ public class PetCafeApp {
             else System.out.println("Order marked as PAID.");
         }
     }
+
+    /*---------------------------------------------------------------------
+    |  Method deleteOrder(conn, in)
+    |
+    |  Purpose:  Deletes an existing order in the order table.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
 
     private static void deleteOrder(Connection conn, Scanner in) throws SQLException {
         int orderId = readInt(in, "Order ID to delete: ");
@@ -988,6 +1481,20 @@ public class PetCafeApp {
         System.out.println("Order deleted.");
     }
 
+    /*---------------------------------------------------------------------
+    |  Method listOrders(conn)
+    |
+    |  Purpose:  Lists the information about all orders in the order table.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database.
+    |
+    *-------------------------------------------------------------------*/
+
     private static void listOrders(Connection conn) throws SQLException {
         String sql = "SELECT order_id, member_id, total_price, payment_status " +
                 "FROM Customer_Order ORDER BY order_id";
@@ -1002,6 +1509,22 @@ public class PetCafeApp {
             }
         }
     }
+
+    /*---------------------------------------------------------------------
+    |  Method eventMenu(conn, in)
+    |
+    |  Purpose:  Displays the options for interacting with event table including adding,
+    |            updating, deleting, and displaying information.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
 
     private static void eventMenu(Connection conn, Scanner in) {
         boolean back = false;
@@ -1048,6 +1571,21 @@ public class PetCafeApp {
         }
     }
 
+    /*---------------------------------------------------------------------
+    |  Method addEvent(conn, in)
+    |
+    |  Purpose:  Adds a new event to the event table.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
+
     private static void addEvent(Connection conn, Scanner in) throws SQLException {
         int id = nextId(conn, "Event", "event_id");
         String title = readString(in, "Title: ");
@@ -1084,6 +1622,22 @@ public class PetCafeApp {
         }
         System.out.println("Event added with ID " + id);
     }
+
+    /*---------------------------------------------------------------------
+    |  Method registerForEvent(conn, in)
+    |
+    |  Purpose:  Allows user to register member for specific event.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
+
 
     private static void registerForEvent(Connection conn, Scanner in) throws SQLException {
         int memberId = readInt(in, "Member ID: ");
@@ -1125,6 +1679,22 @@ public class PetCafeApp {
         System.out.println("Member registered for event.");
     }
 
+    /*---------------------------------------------------------------------
+    |  Method updateEventAttendance(conn, in)
+    |
+    |  Purpose:  Updates event registration status.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
+
+
     private static void updateEventAttendance(Connection conn, Scanner in) throws SQLException {
         int memberId = readInt(in, "Member ID: ");
         int eventId = readInt(in, "Event ID: ");
@@ -1143,6 +1713,22 @@ public class PetCafeApp {
         }
     }
 
+    /*---------------------------------------------------------------------
+    |  Method updateEventPaymentStatus(conn, in)
+    |
+    |  Purpose:  Updates an existing event's payment status.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
+
+
     private static void updateEventPaymentStatus(Connection conn, Scanner in) throws SQLException {
         int memberId = readInt(in, "Member ID: ");
         int eventId = readInt(in, "Event ID: ");
@@ -1159,6 +1745,21 @@ public class PetCafeApp {
             else System.out.println("Payment status updated.");
         }
     }
+
+    /*---------------------------------------------------------------------
+    |  Method deleteEventRegistration(conn, in)
+    |
+    |  Purpose:  Deletes an existing event registration in the event registration table.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
 
     private static void deleteEventRegistration(Connection conn, Scanner in) throws SQLException {
         int memberId = readInt(in, "Member ID: ");
@@ -1204,6 +1805,20 @@ public class PetCafeApp {
         }
     }
 
+    /*---------------------------------------------------------------------
+    |  Method listEvents(conn)
+    |
+    |  Purpose:  Lists the information about all events in the event table.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database.
+    |
+    *-------------------------------------------------------------------*/
+
     private static void listEvents(Connection conn) throws SQLException {
         String sql = "SELECT event_id, title, event_date, start_time, max_attendees " +
                 "FROM Event ORDER BY event_date, start_time";
@@ -1218,6 +1833,22 @@ public class PetCafeApp {
             }
         }
     }
+
+    /*---------------------------------------------------------------------
+    |  Method healthMenu(conn, in)
+    |
+    |  Purpose:  Displays the options for interacting with health table including adding,
+    |            updating, deleting, and displaying information.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
 
     private static void healthMenu(Connection conn, Scanner in) {
         boolean back = false;
@@ -1252,6 +1883,21 @@ public class PetCafeApp {
         }
     }
 
+    /*---------------------------------------------------------------------
+    |  Method addHealthRecord(conn, in)
+    |
+    |  Purpose:  Adds a new health to the health table.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
+
     private static void addHealthRecord(Connection conn, Scanner in) throws SQLException {
         int id = nextId(conn, "Health_Record", "record_id");
         int petId = readInt(in, "Pet ID: ");
@@ -1282,6 +1928,21 @@ public class PetCafeApp {
         System.out.println("Health record added with ID " + id);
     }
 
+    /*---------------------------------------------------------------------
+    |  Method updateHealthRecord(conn, in)
+    |
+    |  Purpose:  Updates an existing health in the health table.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
+
     private static void updateHealthRecord(Connection conn, Scanner in) throws SQLException {
         int id = readInt(in, "Health record ID to update: ");
         String notes = readString(in, "New notes (blank to keep): ");
@@ -1307,6 +1968,20 @@ public class PetCafeApp {
         }
     }
 
+    /*---------------------------------------------------------------------
+    |  Method listHealthRecordsForPet(conn)
+    |
+    |  Purpose:  Lists the information about all health records in the health table.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database.
+    |
+    *-------------------------------------------------------------------*/
+
     private static void listHealthRecordsForPet(Connection conn, Scanner in) throws SQLException {
         int petId = readInt(in, "Pet ID: ");
         String sql = "SELECT record_id, record_date, record_type, status, next_due_date " +
@@ -1326,6 +2001,22 @@ public class PetCafeApp {
             }
         }
     }
+
+    /*---------------------------------------------------------------------
+    |  Method reportMenu(conn, in)
+    |
+    |  Purpose:  Displays the options for different reports so that queries may
+    |            happen.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
 
     private static void reportsMenu(Connection conn, Scanner in) {
         boolean back = false;
@@ -1364,6 +2055,21 @@ public class PetCafeApp {
         }
     }
 
+    /*---------------------------------------------------------------------
+    |  Method reportAdoptionApplicationsForPet(conn, in)
+    |
+    |  Purpose:  Displays all applications for a specific pet.
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
+
     private static void reportAdoptionApplicationsForPet(Connection conn, Scanner in)
             throws SQLException {
         int petId = readInt(in, "Pet ID: ");
@@ -1388,6 +2094,21 @@ public class PetCafeApp {
             }
         }
     }
+
+    /*---------------------------------------------------------------------
+    |  Method reportVisitHistory(conn, in)
+    |
+    |  Purpose:  Reports the visitation history for a given member
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
 
     private static void reportVisitHistory(Connection conn, Scanner in)
             throws SQLException {
@@ -1418,6 +2139,20 @@ public class PetCafeApp {
         }
     }
 
+    /*---------------------------------------------------------------------
+    |  Method reportUpcomingEventsWithCapacity(conn)
+    |
+    |  Purpose:  Reports all upcoming events along with their max capacity
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |
+    *-------------------------------------------------------------------*/
+
     private static void reportUpcomingEventsWithCapacity(Connection conn)
             throws SQLException {
         String sql = "SELECT e.event_id, e.title, e.event_date, e.start_time, " +
@@ -1447,6 +2182,21 @@ public class PetCafeApp {
             }
         }
     }
+
+    /*---------------------------------------------------------------------
+    |  Method reportTopMembers(conn, in)
+    |
+    |  Purpose:  Reports the top members that spent at least N amount of money
+    |
+    |  Pre-condition:  conn is established correctly. Scanner is established correctly.
+    |
+    |  Post-condition: No exception is thrown when getting the results of the query
+    |
+    |  Parameters:
+    |      conn     -- The connection object representing the connection to the database
+    |      in       -- Scanner representing keyboard input.
+    |
+    *-------------------------------------------------------------------*/
 
     private static void reportTopMembers(Connection conn, Scanner in)
             throws SQLException {
