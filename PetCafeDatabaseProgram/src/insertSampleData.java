@@ -36,6 +36,7 @@ import java.sql.*;                 // For access to the SQL interaction methods
 public class insertSampleData {
         public static void main (String [] args){
 
+
         final String oracleURL =   // Magic lectura -> aloe access spell
                         "jdbc:oracle:thin:@aloe.cs.arizona.edu:1521:oracle";
 
@@ -94,29 +95,38 @@ public class insertSampleData {
 
 
             // Send the query to the DBMS, and get and display the results
-
         Statement stmt = null;
 
         try {
 
             stmt = dbconn.createStatement();
 
-            executeSQLFile("initializeTables", stmt);
+  
+            try {
+                executeSQLFile("recreateTables", stmt);
+            } catch (SQLException e) {
+                executeSQLFile("createTables", stmt);
+            }
+            
 
-            insertData("Adoption_Application", new int[] {3 , 6}, new int[] {}, stmt);
-            insertData("Adoption", new int[] {4, 6}, new int[] {}, stmt);
-            insertData("Customer_Order", new int[] {3}, new int[] {4}, stmt);
-            insertData("Event_Registration", new int[] {2}, new int[] {}, stmt);
-            insertData("Event", new int[] {4}, new int[] {5, 6}, stmt);
-            insertData("Health_Record", new int[] {3}, new int[] {}, stmt);
-            insertData("Member", new int[] {4}, new int[] {}, stmt);
+            // Covert Tables that are FK first
             insertData("Membership_Tier", new int[] {}, new int[] {}, stmt);
-            insertData("Menu_Item", new int[] {}, new int[] {}, stmt);
-            insertData("Order_Item", new int[] {}, new int[] {}, stmt);
-            insertData("Pet", new int[] {5}, new int[] {}, stmt);
-            insertData("Reservation", new int[] {3}, new int[] {4, 7, 8}, stmt);
-            insertData("Room", new int[] {}, new int[] {}, stmt);
             insertData("Staff", new int[] {4}, new int[] {}, stmt);
+            insertData("Room", new int[] {}, new int[] {}, stmt);
+            insertData("Member", new int[] {4}, new int[] {}, stmt);
+            insertData("Pet", new int[] {5}, new int[] {}, stmt);
+            insertData("Adoption_Application", new int[] {3 , 6}, new int[] {}, stmt);
+            insertData("Reservation", new int[] {3}, new int[] {4, 7, 8}, stmt);
+            insertData("Event", new int[] {4}, new int[] {5, 6}, stmt);
+
+            insertData("Adoption", new int[] {4, 6}, new int[] {}, stmt);
+            insertData("Event_Registration", new int[] {2}, new int[] {}, stmt);
+            insertData("Health_Record", new int[] {3, 6}, new int[] {}, stmt);
+
+            insertData("Menu_Item", new int[] {}, new int[] {}, stmt);
+            insertData("Customer_Order", new int[] {}, new int[] {3}, stmt);
+            insertData("Order_Item", new int[] {}, new int[] {}, stmt);
+
 
             stmt.close();
             dbconn.close();
