@@ -31,5 +31,6 @@ Imronbek Abduvaliev
  - Created Initial ER Diagram
  - Updated ER Diagram Based on TA Feedback
  - Tested Code on Lectura
-
+ - Fixed bugs and made changes to the code and SQL queries
  - Created ER Diagram / Conceptual Design section of design report
+
