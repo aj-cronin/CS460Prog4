@@ -2,6 +2,14 @@ To run this code, you must compile and run both insertSampleData.java to create 
 
 Specific instructions on how to run these files can be seen in the file headers of each individual program.
 
+All commands below assume you are in the CS460Prog4 directory
+
+javac PetCafeDatabaseProgram/src/insertSampleData.java
+java -cp /usr/lib/oracle/19.8/client64/lib/ojdbc8.jar:PetCafeDatabaseProgram/src insertSampleData abduvaliev a6534
+
+javac PetCafeDatabaseProgram/src/petcafe/DBUtil.java PetCafeDatabaseProgram/src/petcafe/PetCafeApp.java
+java -cp /usr/lib/oracle/19.8/client64/lib/ojdbc8.jar:PetCafeDatabaseProgram/src petcafe.PetCafeApp abduvaliev a6534
+
 
 The Workload Distribution is as follows:
 
@@ -23,4 +31,5 @@ Imronbek Abduvaliev
  - Created Initial ER Diagram
  - Updated ER Diagram Based on TA Feedback
  - Tested Code on Lectura
+
  - Created ER Diagram / Conceptual Design section of design report
